@@ -143,7 +143,7 @@ int parse_packet() {
     counter_stop = 0;
     //Send new packet
     packet_t send = encoder(&list_data[0], counter);
-    if (send.length != 0)
+    if ((send.length != 0) && receive_header != HEADER_ASYNC)
         pkg_send(receive_header, send);
     return TMR1 - t; // Time of esecution
 }

@@ -102,7 +102,7 @@ void update_autosend() {
 }
 
 int send_data() {
-    unsigned int t = TMR1; // Timing function
+    unsigned int t = TMR3; // Timing function
     int i;
     information_packet_t list_data[BUFFER_AUTOSEND];
     int counter = 0;
@@ -125,11 +125,11 @@ int send_data() {
     }
     packet_t send = encoder(&list_data[0], counter);
     pkg_send(HEADER_ASYNC, send);
-    return TMR1 - t; // Time of esecution
+    return TMR3 - t; // Time of esecution
 }
 
 int ProcessADCSamples(Buffer_t* AdcBuffer) {
-    unsigned int t = TMR1; // Timing function
+    unsigned int t = TMR3; // Timing function
     int i;
     //Convert adc value to distance
     for (i = 0; i < NUMBER_INFRARED; i++) {
@@ -140,5 +140,5 @@ int ProcessADCSamples(Buffer_t* AdcBuffer) {
     sensors.current = (3.3 / 1024) * parameter_sensors.gain_current * AdcBuffer->current;
     sensors.voltage = (3.3 / 1024) * parameter_sensors.gain_voltage * AdcBuffer->voltage;
     sensors.temperature = (3.3 / 1024) * parameter_sensors.gain_temperature * AdcBuffer->temperature;
-    return TMR1 - t; // Time of esecution
+    return TMR3 - t; // Time of esecution
 }
