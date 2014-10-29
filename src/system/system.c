@@ -18,9 +18,9 @@
 #include <stdbool.h>         /* For true/false definition                     */
 #include <string.h>
 
-#include "user.h"
-#include "system.h"          /* variables/params used by system.c             */
-#include "packet.h"
+#include "system/user.h"
+#include "system/system.h"          /* variables/params used by system.c             */
+#include "packet/packet.h"
 
 /******************************************************************************/
 /* Global Variable Declaration                                                */

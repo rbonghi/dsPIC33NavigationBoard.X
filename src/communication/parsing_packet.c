@@ -17,12 +17,12 @@
 #include <stdbool.h>       /* Includes true/false definition */
 #include <string.h>
 
-#include "parsing_packet.h"
-#include "decode_packet.h"
-#include "serial.h"
+#include "communication/parsing_packet.h"
+#include "communication/decode_packet.h"
+#include "communication/serial.h"
 
-#include "user.h"
-#include "system.h"
+#include "system/user.h"
+#include "system/system.h"
 
 static unsigned int hashmap_default[10];
 static unsigned int hashmap_navigation[10];

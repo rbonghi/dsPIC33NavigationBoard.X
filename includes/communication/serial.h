@@ -12,7 +12,7 @@
 extern "C" {
 #endif
 
-#include "packet.h"
+#include "packet/packet.h"
 
 #define HEADER_SYNC '#'
 #define HEADER_ASYNC '@'

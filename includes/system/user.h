@@ -2,7 +2,7 @@
 /* User Level #define Macros                                                  */
 /******************************************************************************/
 
-#include "packet.h"
+#include "packet/packet.h"
 
 #define REGULATOR _LATA9
 #define LED_RED _LATA4

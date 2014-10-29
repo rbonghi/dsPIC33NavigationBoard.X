@@ -17,7 +17,7 @@
 #include <stdbool.h>       /* Includes true/false definition */
 #include <string.h>
 
-#include "serial.h"
+#include "communication/serial.h"
 
 /******************************************************************************/
 /* Global Variable Declaration                                                */

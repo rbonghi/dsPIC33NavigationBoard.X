@@ -2,7 +2,7 @@
 /* System Level #define Macros                                                */
 /******************************************************************************/
 
-#include "packet.h"
+#include "packet/packet.h"
 
 /* Name interrupt */
 #define SENDER_PRIORITY IPC0bits.OC1IP

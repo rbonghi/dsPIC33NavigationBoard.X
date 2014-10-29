@@ -17,11 +17,11 @@
 #include <stdbool.h>       /* Includes true/false definition */
 #include <string.h>
 
-#include "parsing_packet.h"
+#include "communication/parsing_packet.h"
 
-#include "serial.h"
-#include "user.h"
-#include "system.h"
+#include "communication/serial.h"
+#include "system/user.h"
+#include "system/system.h"
 
 // From Interrupt
 extern enable_sensor_t enable_sensor;

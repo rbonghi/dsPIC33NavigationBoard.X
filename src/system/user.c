@@ -15,10 +15,10 @@
 
 #include <stdint.h>          /* For uint16_t definition                       */
 #include <stdbool.h>         /* For true/false definition                     */
-#include "user.h"            /* variables/params used by user.c               */
-#include "system.h"
-#include "serial.h"
-#include "parsing_packet.h"
+#include "system/user.h"     /* variables/params used by user.c               */
+#include "system/system.h"
+#include "communication/serial.h"
+#include "communication/parsing_packet.h"
 #include "math.h"
 
 /******************************************************************************/

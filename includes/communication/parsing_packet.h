@@ -12,8 +12,8 @@
 extern "C" {
 #endif
 
-#include "stddef.h"
-#include "packet.h"
+#include <stddef.h>
+#include "packet/packet.h"
 
     void init_hashmap();
     int parse_packet();
