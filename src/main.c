@@ -50,7 +50,9 @@ int16_t main(void) {
     /* Initialize parameter sensor */
     update_parameter();
 
-    while (1) {
-
+    while (true) {
+        
     }
+
+    return true;
 }
