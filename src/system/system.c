@@ -20,7 +20,6 @@
 
 #include "system/user.h"
 #include "system/system.h"          /* variables/params used by system.c             */
-#include "packet/packet.h"
 
 /******************************************************************************/
 /* Global Variable Declaration                                                */
@@ -55,13 +54,31 @@ Buffer_t BufferB __attribute__((space(dma), aligned(LNG_BUFFER)));
 /*                                                                            */
 /******************************************************************************/
 
-/* Refer to the device Family Reference Manual Oscillator section for
-information about available oscillator configurations.  Typically
-this would involve configuring the oscillator tuning register or clock
-switching useing the compiler's __builtin_write_OSCCON functions.
-Refer to the C Compiler for PIC24 MCUs and dsPIC DSCs User Guide in the
-compiler installation directory /doc folder for documentation on the
-__builtin functions.*/
+
+void InitEvents(void) {
+    
+}
+
+/*=============================================================================
+Timer 3 is setup to time-out every 125 microseconds (8Khz Rate). As a result, the module
+will stop sampling and trigger a conversion on every Timer3 time-out, i.e., Ts=125us.
+=============================================================================*/
+void InitTimer3() {
+    T3CONbits.TON = 0; // Disable Timer
+    T3CONbits.TSIDL = 1; // Stop in Idle Mode bit
+    T3CONbits.TGATE = 0; // Disable Gated Timer mode
+    T3CONbits.TCKPS = 0b00; // Select 1:1 Prescaler
+    T3CONbits.TCS = 0; // Select internal clock source
+    TMR3 = 0x0000;
+    PR3 = TMR3_VALUE; // Trigger ADC1 every 125usec
+
+    IPC2bits.T3IP = SYS_TIMER_LEVEL; // Set Timer 3 Interrupt Priority Level
+    IFS0bits.T3IF = 0; // Clear Timer 3 interrupt
+    IEC0bits.T3IE = 1; // Enable Timer 3 interrupt
+
+    T3CONbits.TON = 1; //Start Timer 3
+}
+
 
 void init_process(void) {
 //    name_process_adc_sensor.name = PROCESS_ADC_SENSOR;
@@ -232,28 +249,6 @@ void InitADC(void) {
     IEC0bits.AD1IE = 0; // Do Not Enable A/D interrupt
     AD1CON1bits.ADON = 1; // Turn on the A/D converter
 }
-
-/*=============================================================================
-Timer 3 is setup to time-out every 125 microseconds (8Khz Rate). As a result, the module
-will stop sampling and trigger a conversion on every Timer3 time-out, i.e., Ts=125us.
-=============================================================================*/
-void InitTimer3() {
-    T3CONbits.TON = 0; // Disable Timer
-    T3CONbits.TSIDL = 1; // Stop in Idle Mode bit
-    T3CONbits.TGATE = 0; // Disable Gated Timer mode
-    T3CONbits.TCKPS = 0b00; // Select 1:1 Prescaler
-    T3CONbits.TCS = 0; // Select internal clock source
-    TMR3 = 0x0000;
-    PR3 = TMR3_VALUE; // Trigger ADC1 every 125usec
-
-    IPC2bits.T3IP = SYS_TIMER_LEVEL; // Set Timer 3 Interrupt Priority Level
-    IFS0bits.T3IF = 0; // Clear Timer 3 interrupt
-    IEC0bits.T3IE = 1; // Enable Timer 3 interrupt
-
-    T3CONbits.TON = 1; //Start Timer 3
-}
-
-
 
 /*************************************************************
 Funzione:	void initDma0(void)

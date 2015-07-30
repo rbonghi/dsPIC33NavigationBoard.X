@@ -72,12 +72,6 @@ void InitApp(void) {
     LED_RED = 0;
     LED_BLUE = 0;
     REGULATOR = 0;
-
-    InitADC(); //Open ADC for measure sensors
-    InitDMA0(); //Open DMA0 for buffering measures ADC
-
-    InitTimer3(); //Open Timer1 for clock system
-    InitInterrupts(); //Start others interrupts
 }
 
 void update_parameter() {
