@@ -5,14 +5,7 @@
                    displayName="Header Files"
                    projectFiles="true">
       <logicalFolder name="f1" displayName="communication" projectFiles="true">
-        <itemPath>includes/communication/parsing_packet.h</itemPath>
         <itemPath>includes/communication/serial.h</itemPath>
-        <itemPath>includes/communication/decode_packet.h</itemPath>
-      </logicalFolder>
-      <logicalFolder name="f3" displayName="packet" projectFiles="true">
-        <itemPath>includes/packet/navigation.h</itemPath>
-        <itemPath>includes/packet/packet.h</itemPath>
-        <itemPath>includes/packet/motion.h</itemPath>
       </logicalFolder>
       <logicalFolder name="f2" displayName="system" projectFiles="true">
         <itemPath>includes/system/system.h</itemPath>
@@ -32,9 +25,7 @@
                    displayName="Source Files"
                    projectFiles="true">
       <logicalFolder name="f2" displayName="communication" projectFiles="true">
-        <itemPath>src/communication/parsing_packet.c</itemPath>
         <itemPath>src/communication/serial.c</itemPath>
-        <itemPath>src/communication/decode_packet.c</itemPath>
       </logicalFolder>
       <logicalFolder name="f1" displayName="system" projectFiles="true">
         <itemPath>src/system/configuration_bits.c</itemPath>
@@ -71,20 +62,20 @@
         <linkerTool>
           <linkerLibItems>
             <linkerLibProjectItem>
-              <makeArtifact PL="../or_kernel_c.X"
+              <makeArtifact PL="../or_bus_c.X"
                             CT="3"
                             CN="default"
                             AC="true"
                             BL="true"
-                            WD="../or_kernel_c.X"
+                            WD="../or_bus_c.X"
                             BC="${MAKE}  -f Makefile CONF=default"
                             DBC="${MAKE}  -f Makefile CONF=default TYPE_IMAGE=DEBUG_RUN"
                             CC="rm -rf &quot;build/default&quot; &quot;dist/default&quot;"
-                            OP="dist/default/production/or_kernel_c.X.a"
-                            DOP="dist/default/debug/or_kernel_c.X.a"
-                            FL="dist/default/production/or_kernel_c.X.a"
-                            PD="dist/default/production/or_kernel_c.X.a"
-                            DD="dist/default/debug/or_kernel_c.X.a">
+                            OP="dist/default/production/or_bus_c.X.a"
+                            DOP="dist/default/debug/or_bus_c.X.a"
+                            FL="dist/default/production/or_bus_c.X.a"
+                            PD="dist/default/production/or_bus_c.X.a"
+                            DD="dist/default/debug/or_bus_c.X.a">
               </makeArtifact>
             </linkerLibProjectItem>
             <linkerLibProjectItem>
@@ -105,20 +96,20 @@
               </makeArtifact>
             </linkerLibProjectItem>
             <linkerLibProjectItem>
-              <makeArtifact PL="../or_bus_c.X"
+              <makeArtifact PL="../or_kernel_c.X"
                             CT="3"
                             CN="default"
                             AC="true"
                             BL="true"
-                            WD="../or_bus_c.X"
+                            WD="../or_kernel_c.X"
                             BC="${MAKE}  -f Makefile CONF=default"
                             DBC="${MAKE}  -f Makefile CONF=default TYPE_IMAGE=DEBUG_RUN"
                             CC="rm -rf &quot;build/default&quot; &quot;dist/default&quot;"
-                            OP="dist/default/production/or_bus_c.X.a"
-                            DOP="dist/default/debug/or_bus_c.X.a"
-                            FL="dist/default/production/or_bus_c.X.a"
-                            PD="dist/default/production/or_bus_c.X.a"
-                            DD="dist/default/debug/or_bus_c.X.a">
+                            OP="dist/default/production/or_kernel_c.X.a"
+                            DOP="dist/default/debug/or_kernel_c.X.a"
+                            FL="dist/default/production/or_kernel_c.X.a"
+                            PD="dist/default/production/or_kernel_c.X.a"
+                            DD="dist/default/debug/or_kernel_c.X.a">
               </makeArtifact>
             </linkerLibProjectItem>
           </linkerLibItems>

@@ -2,8 +2,6 @@
 /* System Level #define Macros                                                */
 /******************************************************************************/
 
-#include "packet/packet.h"
-
 /* Name interrupt */
 #define SENDER_PRIORITY IPC0bits.OC1IP
 #define RX_PARSER_PRIORITY IPC1bits.OC2IP
@@ -60,14 +58,12 @@ functions, and other non-peripheral microcontroller initialization functions
 go here. */
 
 void init_process(void);
-process_buffer_t decodeNameProcess(int number);
+//process_buffer_t decodeNameProcess(int number);
 unsigned char update_priority(void);
 unsigned char update_frequency(void);
-services_t services(services_t service);
+//services_t services(services_t service);
 void ConfigureOscillator(void); /* Handles clock switching/osc initialization */
 void InitTimer3(void); /* Initialization Timer 3 - Timer system and ADC timer */
 void InitInterrupts(void); /* Initalization others interrupts */
-void InitUART1(void); /* Initialization UART1 for comunication */
 void InitDMA0(void); /* Initialization DMA0 for ADC current */
-void InitDMA1(void); /* Initialization DMA1 for UART Tx transmition */
 void InitADC(void); /* Initialization ADC for measure sensors*/

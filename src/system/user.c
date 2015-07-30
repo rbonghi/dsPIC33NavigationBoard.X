@@ -17,19 +17,17 @@
 #include <stdbool.h>         /* For true/false definition                     */
 #include "system/user.h"     /* variables/params used by user.c               */
 #include "system/system.h"
-#include "communication/serial.h"
-#include "communication/parsing_packet.h"
 #include "math.h"
 
 /******************************************************************************/
 /* Global Variable Declaration                                                */
 /******************************************************************************/
 sensor_t sensors;
-infrared_t infrared;
-humidity_t humidity;
-parameter_sensor_t parameter_sensors;
-bool enable_autosend = false;
-autosend_t autosend;
+//infrared_t infrared;
+//humidity_t humidity;
+//parameter_sensor_t parameter_sensors;
+//bool enable_autosend = false;
+//autosend_t autosend;
 
 /******************************************************************************/
 /* User Functions                                                             */
@@ -78,53 +76,50 @@ void InitApp(void) {
     InitADC(); //Open ADC for measure sensors
     InitDMA0(); //Open DMA0 for buffering measures ADC
 
-    InitUART1(); //Open UART1 for serial comunication
-    InitDMA1(); //Open DMA1 for Tx UART1
-
     InitTimer3(); //Open Timer1 for clock system
     InitInterrupts(); //Start others interrupts
 }
 
 void update_parameter() {
-    parameter_sensors.exp_sharp = -1.11;
-    parameter_sensors.gain_current = 1;
-    parameter_sensors.gain_humidity = 1;
-    parameter_sensors.gain_sharp = 12.33;
-    parameter_sensors.gain_temperature = 1;
-    parameter_sensors.gain_voltage = 1;
+//    parameter_sensors.exp_sharp = -1.11;
+//    parameter_sensors.gain_current = 1;
+//    parameter_sensors.gain_humidity = 1;
+//    parameter_sensors.gain_sharp = 12.33;
+//    parameter_sensors.gain_temperature = 1;
+//    parameter_sensors.gain_voltage = 1;
 }
 
 void update_autosend() {
-    if (autosend.pkgs[0] != -1)
-        enable_autosend = true;
-    else
-        enable_autosend = false;
+//    if (autosend.pkgs[0] != -1)
+//        enable_autosend = true;
+//    else
+//        enable_autosend = false;
 }
 
 int send_data() {
     unsigned int t = TMR3; // Timing function
-    int i;
-    information_packet_t list_data[BUFFER_AUTOSEND];
-    int counter = 0;
-    abstract_packet_t packet;
-    for (i = 0; i < BUFFER_AUTOSEND; ++i) {
-        if (autosend.pkgs[i] == -1)
-            break;
-        switch (autosend.pkgs[i]) {
-            case INFRARED:
-                packet.infrared = infrared;
-                list_data[counter++] = createDataPacket(autosend.pkgs[i], HASHMAP_NAVIGATION, &packet);
-                break;
-            case SENSOR:
-                packet.sensor = sensors;
-                list_data[counter++] = createDataPacket(autosend.pkgs[i], HASHMAP_NAVIGATION, &packet);
-                break;
-            default:
-                break;
-        }
-    }
-    packet_t send = encoder(&list_data[0], counter);
-    pkg_send(HEADER_ASYNC, send);
+//    int i;
+//    information_packet_t list_data[BUFFER_AUTOSEND];
+//    int counter = 0;
+//    abstract_packet_t packet;
+//    for (i = 0; i < BUFFER_AUTOSEND; ++i) {
+//        if (autosend.pkgs[i] == -1)
+//            break;
+//        switch (autosend.pkgs[i]) {
+//            case INFRARED:
+//                packet.infrared = infrared;
+//                list_data[counter++] = createDataPacket(autosend.pkgs[i], HASHMAP_NAVIGATION, &packet);
+//                break;
+//            case SENSOR:
+//                packet.sensor = sensors;
+//                list_data[counter++] = createDataPacket(autosend.pkgs[i], HASHMAP_NAVIGATION, &packet);
+//                break;
+//            default:
+//                break;
+//        }
+//    }
+//    packet_t send = encoder(&list_data[0], counter);
+    //pkg_send(HEADER_ASYNC, send);
     return TMR3 - t; // Time of esecution
 }
 
@@ -132,13 +127,13 @@ int ProcessADCSamples(Buffer_t* AdcBuffer) {
     unsigned int t = TMR3; // Timing function
     int i;
     //Convert adc value to distance
-    for (i = 0; i < NUMBER_INFRARED; i++) {
-        infrared.infrared[i] = parameter_sensors.gain_sharp * powf((3.3 / 1024) * AdcBuffer->infrared[i], parameter_sensors.exp_sharp);
-    }
-    //Convert other sensors
-    humidity = (3.3 / 1024) * parameter_sensors.gain_humidity * AdcBuffer->hymidity;
-    sensors.current = (3.3 / 1024) * parameter_sensors.gain_current * AdcBuffer->current;
-    sensors.voltage = (3.3 / 1024) * parameter_sensors.gain_voltage * AdcBuffer->voltage;
-    sensors.temperature = (3.3 / 1024) * parameter_sensors.gain_temperature * AdcBuffer->temperature;
+//    for (i = 0; i < NUMBER_INFRARED; i++) {
+//        infrared.infrared[i] = parameter_sensors.gain_sharp * powf((3.3 / 1024) * AdcBuffer->infrared[i], parameter_sensors.exp_sharp);
+//    }
+//    //Convert other sensors
+//    humidity = (3.3 / 1024) * parameter_sensors.gain_humidity * AdcBuffer->hymidity;
+//    sensors.current = (3.3 / 1024) * parameter_sensors.gain_current * AdcBuffer->current;
+//    sensors.voltage = (3.3 / 1024) * parameter_sensors.gain_voltage * AdcBuffer->voltage;
+//    sensors.temperature = (3.3 / 1024) * parameter_sensors.gain_temperature * AdcBuffer->temperature;
     return TMR3 - t; // Time of esecution
 }

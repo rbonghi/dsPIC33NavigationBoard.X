@@ -32,13 +32,13 @@ unsigned char version_time_[] = __TIME__;
 unsigned char author_code[] = "Raffaello Bonghi";
 unsigned char name_board[] = "Navigation Board";
 unsigned char version_code[] = "v2.0";
-parameter_system_t parameter_system;
+//parameter_system_t parameter_system;
 
 // From Interrupt
-extern volatile process_t time, priority, frequency;
-extern process_buffer_t name_process_adc_sensor, name_process_sender;
+//extern volatile process_t time, priority, frequency;
+//extern process_buffer_t name_process_adc_sensor, name_process_sender;
 
-extern unsigned char BufferTx[MAX_TX_BUFF] __attribute__((space(dma)));
+//extern unsigned char BufferTx[MAX_TX_BUFF] __attribute__((space(dma)));
 
 // Number of locations for ADC buffer = 14 (AN0 to AN13) x 8 = 112 words
 // Align the buffer to 128 words or 256 bytes. This is needed for peripheral indirect mode
@@ -64,94 +64,94 @@ compiler installation directory /doc folder for documentation on the
 __builtin functions.*/
 
 void init_process(void) {
-    name_process_adc_sensor.name = PROCESS_ADC_SENSOR;
-    strcpy(name_process_adc_sensor.buffer, ADC_SENSOR_STRING);
-    name_process_sender.name = PROCESS_SENDER;
-    strcpy(name_process_sender.buffer, SENDER_STRING);
-    //Parameter system
-    parameter_system.step_timer = (int) (TMR3_VALUE);
-    parameter_system.int_tm_mill = (int) (TCTMR3 * 1000);
-    //Basic information priority and frequency
-    priority.length = PROCESS_NAVIGATION_LENGTH;
-    priority.idle = 0;
-    priority.parse_packet = RX_PARSER_LEVEL;
-    priority.process[PROCESS_SENDER] = SENDER_LEVEL;
-    frequency.length = PROCESS_NAVIGATION_LENGTH;
-    frequency.idle = 0;
-    frequency.parse_packet = 0;
-    frequency.process[PROCESS_SENDER] = SENDERSW;
-    time.length = PROCESS_NAVIGATION_LENGTH;
+//    name_process_adc_sensor.name = PROCESS_ADC_SENSOR;
+//    strcpy(name_process_adc_sensor.buffer, ADC_SENSOR_STRING);
+//    name_process_sender.name = PROCESS_SENDER;
+//    strcpy(name_process_sender.buffer, SENDER_STRING);
+//    //Parameter system
+//    parameter_system.step_timer = (int) (TMR3_VALUE);
+//    parameter_system.int_tm_mill = (int) (TCTMR3 * 1000);
+//    //Basic information priority and frequency
+//    priority.length = PROCESS_NAVIGATION_LENGTH;
+//    priority.idle = 0;
+//    priority.parse_packet = RX_PARSER_LEVEL;
+//    priority.process[PROCESS_SENDER] = SENDER_LEVEL;
+//    frequency.length = PROCESS_NAVIGATION_LENGTH;
+//    frequency.idle = 0;
+//    frequency.parse_packet = 0;
+//    frequency.process[PROCESS_SENDER] = SENDERSW;
+//    time.length = PROCESS_NAVIGATION_LENGTH;
 }
 
-process_buffer_t decodeNameProcess(int number) {
-    process_buffer_t process;
-    switch (number) {
-        case -1:
-            process.name = PROCESS_NAVIGATION_LENGTH;
-            break;
-        case PROCESS_ADC_SENSOR:
-            process = name_process_adc_sensor;
-            break;
-        case PROCESS_SENDER:
-            process = name_process_sender;
-            break;
-    }
-    return process;
-}
+//process_buffer_t decodeNameProcess(int number) {
+//    process_buffer_t process;
+//    switch (number) {
+//        case -1:
+//            process.name = PROCESS_NAVIGATION_LENGTH;
+//            break;
+//        case PROCESS_ADC_SENSOR:
+//            process = name_process_adc_sensor;
+//            break;
+//        case PROCESS_SENDER:
+//            process = name_process_sender;
+//            break;
+//    }
+//    return process;
+//}
 
 unsigned char update_priority(void) {
-    priority.idle = 0;
-    InitInterrupts();
-    return ACK;
+//    priority.idle = 0;
+//    InitInterrupts();
+//    return ACK;
 }
 
 unsigned char update_frequency(void) {
-    frequency.idle = 0;
-    frequency.parse_packet = 0;
-    if (frequency.process[PROCESS_SENDER] == 0) {
-        SENDER_ENABLE = 0; // Disable Output Compare Channel 1 interrupt
-    } else
-        SENDER_ENABLE = 1; // Enable Output Compare Channel 1 interrupt
-    return ACK;
+//    frequency.idle = 0;
+//    frequency.parse_packet = 0;
+//    if (frequency.process[PROCESS_SENDER] == 0) {
+//        SENDER_ENABLE = 0; // Disable Output Compare Channel 1 interrupt
+//    } else
+//        SENDER_ENABLE = 1; // Enable Output Compare Channel 1 interrupt
+//    return ACK;
 }
 
-services_t services(services_t service) {
-    services_t service_send;
-    service_send.command = service.command;
-    switch (service.command) {
-        case RESET:
-            if (reset_count < 3) {
-                reset_count++;
-            } else {
-                SET_CPU_IPL(7); // disable all user interrupts
-                //DelayN1ms(200);
-                asm("RESET");
-            }
-            break;
-        case DATE_CODE:
-            memcpy(service_send.buffer, version_date_, sizeof (version_date_));
-            service_send.buffer[sizeof (version_date_) - 1] = ' ';
-            memcpy(service_send.buffer + sizeof (version_date_), version_time_, sizeof (version_time_));
-            break;
-        case NAME_BOARD:
-            memcpy(service_send.buffer, name_board, sizeof (name_board));
-            break;
-        case VERSION_CODE:
-            memcpy(service_send.buffer, version_code, sizeof (version_code));
-            break;
-        case AUTHOR_CODE:
-            memcpy(service_send.buffer, author_code, sizeof (author_code));
-            break;
-        default:
-            break;
-    }
-    return service_send;
-}
+//services_t services(services_t service) {
+//    services_t service_send;
+//    service_send.command = service.command;
+//    switch (service.command) {
+//        case RESET:
+//            if (reset_count < 3) {
+//                reset_count++;
+//            } else {
+//                SET_CPU_IPL(7); // disable all user interrupts
+//                //DelayN1ms(200);
+//                asm("RESET");
+//            }
+//            break;
+//        case DATE_CODE:
+//            memcpy(service_send.buffer, version_date_, sizeof (version_date_));
+//            service_send.buffer[sizeof (version_date_) - 1] = ' ';
+//            memcpy(service_send.buffer + sizeof (version_date_), version_time_, sizeof (version_time_));
+//            break;
+//        case NAME_BOARD:
+//            memcpy(service_send.buffer, name_board, sizeof (name_board));
+//            break;
+//        case VERSION_CODE:
+//            memcpy(service_send.buffer, version_code, sizeof (version_code));
+//            break;
+//        case AUTHOR_CODE:
+//            memcpy(service_send.buffer, author_code, sizeof (author_code));
+//            break;
+//        default:
+//            break;
+//    }
+//    return service_send;
+//}
 
 void InitInterrupts(void) {
     //For ADC sensor
     SENDER_ENABLE = 0; // Disable Output Compare Channel 1 interrupt
-    SENDER_PRIORITY = priority.process[PROCESS_SENDER]; // Set Output Compare Channel 1 Priority Level
+//    SENDER_PRIORITY = priority.process[PROCESS_SENDER]; // Set Output Compare Channel 1 Priority Level
     IFS0bits.OC1IF = 0; // Clear Output Compare Channel 1 Interrupt Flag
     SENDER_ENABLE = 1; // Enable Output Compare Channel 1 interrupt
 
@@ -253,28 +253,7 @@ void InitTimer3() {
     T3CONbits.TON = 1; //Start Timer 3
 }
 
-void InitUART1(void) {
-    U1MODEbits.STSEL = 0; // 1-stop bit
-    U1MODEbits.PDSEL = 0; // No Parity, 8-data bits
-    U1MODEbits.ABAUD = 0; // Auto-Baud Disabled
-    U1MODEbits.BRGH = 0; // Low Speed mode
 
-    U1BRG = BRGVAL; // BAUD Rate Setting on System.h
-
-    U1STAbits.UTXISEL0 = 0; // Interrupt after one Tx character is transmitted
-    U1STAbits.UTXISEL1 = 0;
-
-    IEC0bits.U1TXIE = 0; // Disable UART Tx interrupt
-    U1STAbits.URXISEL = 0; // Interrupt after one RX character is received
-
-    U1MODEbits.UARTEN = 1; // Enable UART
-    U1STAbits.UTXEN = 1; // Enable UART Tx
-
-    IEC4bits.U1EIE = 0;
-    IPC2bits.U1RXIP = UART_RX_LEVEL; // Set UART Rx Interrupt Priority Level
-    IFS0bits.U1RXIF = 0; // Reset RX interrupt flag
-    IEC0bits.U1RXIE = 1; // Enable RX interrupt
-}
 
 /*************************************************************
 Funzione:	void initDma0(void)
@@ -303,23 +282,3 @@ void InitDMA0(void) {
 
 }
 
-void InitDMA1(void) {
-    //DMA1CON = 0x2001;			// One-Shot, Post-Increment, RAM-to-Peripheral
-    DMA1CONbits.CHEN = 0;
-    DMA1CONbits.SIZE = 1;
-    DMA1CONbits.DIR = 1;
-    DMA1CONbits.HALF = 0;
-    DMA1CONbits.NULLW = 0;
-    DMA1CONbits.AMODE = 0;
-    DMA1CONbits.MODE = 1;
-
-    DMA1CNT = MAX_TX_BUFF - 1; // 32 DMA requests
-    DMA1REQ = 0x000c; // Select UART1 Transmitter
-
-    DMA1STA = __builtin_dmaoffset(BufferTx);
-    DMA1PAD = (volatile unsigned int) &U1TXREG;
-
-    IPC3bits.DMA1IP = UART_TX_LEVEL; // Set DMA Interrupt Priority Level
-    IFS0bits.DMA1IF = 0; // Clear DMA Interrupt Flag
-    IEC0bits.DMA1IE = 1; // Enable DMA interrupt
-}

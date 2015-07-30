@@ -16,10 +16,11 @@
 #include <stdint.h>        /* Includes uint16_t definition                    */
 #include <stdbool.h>       /* Includes true/false definition                  */
 
+
+#include "communication/serial.h"
+
 #include "system/system.h"        /* System funct/params, like osc/peripheral config */
 #include "system/user.h"          /* User funct/params, such as InitApp              */
-#include "communication/parsing_packet.h"
-#include "communication/serial.h"
 
 /******************************************************************************/
 /* Global Variable Declaration                                                */
@@ -37,12 +38,11 @@ int16_t main(void) {
     /* Configure the oscillator for the device */
     ConfigureOscillator();
 
-    /* Initialize hashmap packet */
-    init_hashmap();
+    /** SERIAL CONFIGURATION **/
+    SerialComm_Init();  ///< Open UART1 for serial communication and Open DMA1 for TX UART1
+    
     /* Initialize variables for process */
     init_process();
-    /* Initialize variables for robots */
-    init_buff_serial_error();
 
     /* Initialize IO ports and peripherals */
     InitApp();

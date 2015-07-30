@@ -12,7 +12,7 @@
 //#define DEAD_RECKONING_FLAG IFS3bits.RTCIF
 
 typedef struct Buffer {
-    int16_t infrared[NUMBER_INFRARED];
+    int16_t infrared[20];//NUMBER_INFRARED];
     int16_t hymidity;
     int16_t temperature;
     int16_t voltage;

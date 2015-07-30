@@ -18,8 +18,6 @@
 
 #include "system/system.h"
 #include "system/user.h"
-#include "communication/serial.h"
-#include "communication/parsing_packet.h"
 
 
 /******************************************************************************/
@@ -28,9 +26,9 @@
 
 unsigned int DmaBuffer = 0;
 unsigned int counter_led = 0, counter_send = 0, counter_stop = 0;
-volatile process_t time, priority, frequency;
-process_buffer_t name_process_adc_sensor, name_process_sender;
-enable_sensor_t enable_sensor = false;
+//volatile process_t time, priority, frequency;
+//process_buffer_t name_process_adc_sensor, name_process_sender;
+//enable_sensor_t enable_sensor = false;
 
 //From System.c
 extern Buffer_t BufferA __attribute__((space(dma), aligned(LNG_BUFFER)));
@@ -149,76 +147,44 @@ extern bool enable_autosend;
 
 void __attribute__((interrupt, auto_psv)) _T3Interrupt(void) {
     IFS0bits.T3IF = 0; // Clear Timer 3 Interrupt Flag
-    REGULATOR = enable_sensor;
-    if (!(counter_send % frequency.process[PROCESS_SENDER]) && (enable_autosend == true)) {
-        SENDER_FLAG ^= 1;
-        counter_send = 0;
-    }
-    if (!(counter_led % BLINKSW)) {
-        LED_BLUE ^= 1;
-        counter_led = 0;
-    }
-    if (!((counter_stop + 1) % SENDER_STOP_SW)) {
-        //stop autosend
-        enable_autosend = false;
-        //disable regulator
-        enable_sensor = 0;
-        counter_stop = 0;
-    }
-    counter_stop++;
-    counter_led++;
-    counter_send++;
+//    REGULATOR = enable_sensor;
+//    if (!(counter_send % frequency.process[PROCESS_SENDER]) && (enable_autosend == true)) {
+//        SENDER_FLAG ^= 1;
+//        counter_send = 0;
+//    }
+//    if (!(counter_led % BLINKSW)) {
+//        LED_BLUE ^= 1;
+//        counter_led = 0;
+//    }
+//    if (!((counter_stop + 1) % SENDER_STOP_SW)) {
+//        //stop autosend
+//        enable_autosend = false;
+//        //disable regulator
+//        enable_sensor = 0;
+//        counter_stop = 0;
+//    }
+//    counter_stop++;
+//    counter_led++;
+//    counter_send++;
 }
 
 void __attribute__((interrupt, auto_psv)) _OC1Interrupt(void) {
     SENDER_FLAG = 0; //interrupt flag reset
-    time.process[PROCESS_SENDER] = send_data();
+//    time.process[PROCESS_SENDER] = send_data();
 }
 
 void __attribute__((interrupt, auto_psv)) _OC2Interrupt(void) {
     PARSER_FLAG = 0; //interrupt flag reset
-    time.parse_packet = parse_packet();
-}
-
-unsigned int ReadUART1(void) {
-    if (U1MODEbits.PDSEL == 3)
-        return (U1RXREG);
-    else
-        return (U1RXREG & 0xFF);
-}
-
-void __attribute__((interrupt, auto_psv)) _U1RXInterrupt(void) {
-    IFS0bits.U1RXIF = 0; // clear RX interrupt flag
-
-    /* get the data */
-    if (U1STAbits.URXDA == 1) {
-        if (decode_pkgs(ReadUART1())) {
-            PARSER_FLAG = 1; //if correct packet parse command start interrupt flag
-        }
-    } else {
-        /* check for receive errors */
-        if (U1STAbits.FERR == 1) {
-            pkg_error(ERROR_FRAMMING);
-        }
-        /* must clear the overrun error to keep uart receiving */
-        if (U1STAbits.OERR == 1) {
-            U1STAbits.OERR = 0;
-            pkg_error(ERROR_OVERRUN);
-        }
-    }
+    //time.parse_packet = parse_packet();
 }
 
 void __attribute__((interrupt, auto_psv)) _DMA0Interrupt(void) {
-    if (DmaBuffer == 0)
-        time.process[PROCESS_ADC_SENSOR] = ProcessADCSamples(&BufferA);
-    else
-        time.process[PROCESS_ADC_SENSOR] = ProcessADCSamples(&BufferB);
+//    if (DmaBuffer == 0)
+//        time.process[PROCESS_ADC_SENSOR] = ProcessADCSamples(&BufferA);
+//    else
+//        time.process[PROCESS_ADC_SENSOR] = ProcessADCSamples(&BufferB);
 
     DmaBuffer ^= 1;
 
     IFS0bits.DMA0IF = 0; // Clear the DMA0 Interrupt Flag
-}
-
-void __attribute__((interrupt, auto_psv)) _DMA1Interrupt(void) {
-    IFS0bits.DMA1IF = 0; // Clear the DMA1 Interrupt Flag
 }
