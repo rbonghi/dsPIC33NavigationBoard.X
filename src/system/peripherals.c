@@ -180,3 +180,18 @@ void Peripherals_Init(void) {
     InitADC();
     InitDMA0();
 }
+
+int ProcessADCSamples(Buffer_t* AdcBuffer) {
+    unsigned int t = TMR3; // Timing function
+//    int i;
+    //Convert adc value to distance
+//    for (i = 0; i < NUMBER_INFRARED; i++) {
+//        infrared.infrared[i] = parameter_sensors.gain_sharp * powf((3.3 / 1024) * AdcBuffer->infrared[i], parameter_sensors.exp_sharp);
+//    }
+//    //Convert other sensors
+//    humidity = (3.3 / 1024) * parameter_sensors.gain_humidity * AdcBuffer->hymidity;
+//    sensors.current = (3.3 / 1024) * parameter_sensors.gain_current * AdcBuffer->current;
+//    sensors.voltage = (3.3 / 1024) * parameter_sensors.gain_voltage * AdcBuffer->voltage;
+//    sensors.temperature = (3.3 / 1024) * parameter_sensors.gain_temperature * AdcBuffer->temperature;
+    return TMR3 - t; // Time of esecution
+}

@@ -37,9 +37,8 @@ int16_t main(void) {
     ConfigureOscillator();  ///< Configure the oscillator for the device
     Peripherals_Init();     ///< Initialize IO ports and peripherals
     
-    
-//    InitEvents();   ///< Initialize processes controller
-//    InitTimer3();   ///< Open Timer1 for clock system
+    InitEvents();   ///< Initialize processes controller
+    InitTimer3();   ///< Open Timer1 for clock system
 
     /** SERIAL CONFIGURATION **/
     SerialComm_Init();  ///< Open UART1 for serial communication and Open DMA1 for TX UART1

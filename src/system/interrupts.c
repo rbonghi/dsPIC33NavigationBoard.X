@@ -25,14 +25,13 @@
 /******************************************************************************/
 
 unsigned int DmaBuffer = 0;
-unsigned int counter_led = 0, counter_send = 0, counter_stop = 0;
 //volatile process_t time, priority, frequency;
 //process_buffer_t name_process_adc_sensor, name_process_sender;
 //enable_sensor_t enable_sensor = false;
 
-//From System.c
-extern Buffer_t BufferA __attribute__((space(dma), aligned(LNG_BUFFER)));
-extern Buffer_t BufferB __attribute__((space(dma), aligned(LNG_BUFFER)));
+////From System.c
+//extern Buffer_t BufferA __attribute__((space(dma), aligned(LNG_BUFFER)));
+//extern Buffer_t BufferB __attribute__((space(dma), aligned(LNG_BUFFER)));
 
 //From user
 extern bool enable_autosend;
@@ -144,39 +143,6 @@ extern bool enable_autosend;
 /* Interrupt Routines                                                         */
 
 /******************************************************************************/
-
-void __attribute__((interrupt, auto_psv)) _T3Interrupt(void) {
-    IFS0bits.T3IF = 0; // Clear Timer 3 Interrupt Flag
-//    REGULATOR = enable_sensor;
-//    if (!(counter_send % frequency.process[PROCESS_SENDER]) && (enable_autosend == true)) {
-//        SENDER_FLAG ^= 1;
-//        counter_send = 0;
-//    }
-//    if (!(counter_led % BLINKSW)) {
-//        LED_BLUE ^= 1;
-//        counter_led = 0;
-//    }
-//    if (!((counter_stop + 1) % SENDER_STOP_SW)) {
-//        //stop autosend
-//        enable_autosend = false;
-//        //disable regulator
-//        enable_sensor = 0;
-//        counter_stop = 0;
-//    }
-//    counter_stop++;
-//    counter_led++;
-//    counter_send++;
-}
-
-void __attribute__((interrupt, auto_psv)) _OC1Interrupt(void) {
-    SENDER_FLAG = 0; //interrupt flag reset
-//    time.process[PROCESS_SENDER] = send_data();
-}
-
-void __attribute__((interrupt, auto_psv)) _OC2Interrupt(void) {
-    PARSER_FLAG = 0; //interrupt flag reset
-    //time.parse_packet = parse_packet();
-}
 
 void __attribute__((interrupt, auto_psv)) _DMA0Interrupt(void) {
 //    if (DmaBuffer == 0)

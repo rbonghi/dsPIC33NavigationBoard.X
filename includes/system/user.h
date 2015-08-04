@@ -7,9 +7,6 @@
 #define REGULATOR _LATA9
 #define LED_RED _LATA4
 #define LED_BLUE _LATA8
-#define SENDER_FLAG IFS0bits.OC1IF
-#define PARSER_FLAG IFS0bits.OC2IF
-//#define DEAD_RECKONING_FLAG IFS3bits.RTCIF
 
 typedef struct Buffer {
     int16_t infrared[20];//NUMBER_INFRARED];

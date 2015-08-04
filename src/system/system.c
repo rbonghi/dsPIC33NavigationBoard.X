@@ -18,19 +18,43 @@
 #include <stdbool.h>         /* For true/false definition                     */
 #include <string.h>
 
-#include "system/user.h"
+#include <system/events.h>
+#include <system/task_manager.h>
+
 #include "system/system.h"          /* variables/params used by system.c             */
 
 /******************************************************************************/
 /* Global Variable Declaration                                                */
 /******************************************************************************/
 
-unsigned int reset_count = 1;
-unsigned char version_date_[] = __DATE__;
-unsigned char version_time_[] = __TIME__;
-unsigned char author_code[] = "Raffaello Bonghi";
-unsigned char name_board[] = "Navigation Board";
-unsigned char version_code[] = "v2.0";
+unsigned char _VERSION_DATE[] = __DATE__;
+unsigned char _VERSION_TIME[] = __TIME__;
+unsigned char _VERSION_CODE[] = "v0.6";
+unsigned char _AUTHOR_CODE[] = "Raffaello Bonghi";
+unsigned char _BOARD_TYPE[] = "Navigation Board";
+unsigned char _BOARD_NAME[] = "Navigation Board";
+
+#define EVENT_PRIORITY_LOW_ENABLE IEC3bits.RTCIE
+#define EVENT_PRIORITY_LOW_FLAG IFS3bits.RTCIF
+#define EVENT_PRIORITY_LOW_P IPC15bits.RTCIP
+hardware_bit_t RTCIF = REGISTER_INIT(IFS3, 14);
+
+#define EVENT_PRIORITY_MEDIUM_ENABLE IEC0bits.OC1IE
+#define EVENT_PRIORITY_MEDIUM_FLAG IFS0bits.OC1IF
+#define EVENT_PRIORITY_MEDIUM_P IPC0bits.OC1IP
+hardware_bit_t OC1IF = REGISTER_INIT(IFS0, 2);
+
+#define EVENT_PRIORITY_HIGH_ENABLE IEC0bits.OC2IE
+#define EVENT_PRIORITY_HIGH_FLAG IFS0bits.OC2IF
+#define EVENT_PRIORITY_HIGH_P IPC1bits.OC2IP
+hardware_bit_t OC2IF = REGISTER_INIT(IFS0, 6);
+
+#define EVENT_PRIORITY_VERY_LOW_ENABLE IEC1bits.OC3IE
+#define EVENT_PRIORITY_VERY_LOW_FLAG IFS1bits.OC3IF
+#define EVENT_PRIORITY_VERY_LOW_P IPC6bits.OC3IP
+hardware_bit_t OC3IF = REGISTER_INIT(IFS1, 9);
+
+
 //parameter_system_t parameter_system;
 
 // From Interrupt
@@ -58,21 +82,6 @@ void ConfigureOscillator(void) {
     }; // Wait for PLL to lock
 }
 
-//******** OLD
-
-/******************************************************************************/
-/* System Level Functions                                                     */
-/*                                                                            */
-/* Custom oscillator configuration funtions, reset source evaluation          */
-/* functions, and other non-peripheral microcontroller initialization         */
-/* functions get placed in system.c.                                          */
-/*                                                                            */
-/******************************************************************************/
-
-/*=============================================================================
-Timer 3 is setup to time-out every 125 microseconds (8Khz Rate). As a result, the module
-will stop sampling and trigger a conversion on every Timer3 time-out, i.e., Ts=125us.
-=============================================================================*/
 void InitTimer3() {
     T3CONbits.TON = 0; // Disable Timer
     T3CONbits.TSIDL = 1; // Stop in Idle Mode bit
@@ -88,6 +97,82 @@ void InitTimer3() {
 
     T3CONbits.TON = 1; //Start Timer 3
 }
+
+void InitEvents(void) {
+    /// Register event controller
+    init_events(&TMR1, &PR1);
+    
+    EVENT_PRIORITY_VERY_LOW_ENABLE = 0;
+    EVENT_PRIORITY_VERY_LOW_P = EVENT_PRIORITY_VERY_LOW_LEVEL;
+    register_interrupt(EVENT_PRIORITY_VERY_LOW, &RTCIF);
+    EVENT_PRIORITY_VERY_LOW_ENABLE = 1;
+    
+    EVENT_PRIORITY_LOW_ENABLE = 0;
+    EVENT_PRIORITY_LOW_P = EVENT_PRIORITY_LOW_LEVEL;
+    register_interrupt(EVENT_PRIORITY_LOW, &RTCIF);
+    EVENT_PRIORITY_LOW_ENABLE = 1;
+    
+    EVENT_PRIORITY_MEDIUM_ENABLE = 0;
+    EVENT_PRIORITY_MEDIUM_P = EVENT_PRIORITY_MEDIUM_LEVEL;
+    register_interrupt(EVENT_PRIORITY_MEDIUM, &OC1IF);
+    EVENT_PRIORITY_MEDIUM_ENABLE = 1;
+    
+    EVENT_PRIORITY_HIGH_ENABLE = 0;
+    EVENT_PRIORITY_HIGH_P = EVENT_PRIORITY_HIGH_LEVEL;
+    register_interrupt(EVENT_PRIORITY_HIGH, &OC2IF);
+    EVENT_PRIORITY_HIGH_ENABLE = 1;
+    
+    /// Initialization task controller
+    task_init(FRTMR3);
+}
+
+void __attribute__((interrupt, auto_psv)) _T3Interrupt(void) {
+    /// Execution task manager
+    task_manager();
+    IFS0bits.T3IF = 0; // Clear Timer 3 Interrupt Flag
+//    REGULATOR = enable_sensor;
+//    if (!(counter_send % frequency.process[PROCESS_SENDER]) && (enable_autosend == true)) {
+//        SENDER_FLAG ^= 1;
+//        counter_send = 0;
+//    }
+//    if (!(counter_led % BLINKSW)) {
+//        LED_BLUE ^= 1;
+//        counter_led = 0;
+//    }
+//    if (!((counter_stop + 1) % SENDER_STOP_SW)) {
+//        //stop autosend
+//        enable_autosend = false;
+//        //disable regulator
+//        enable_sensor = 0;
+//        counter_stop = 0;
+//    }
+}
+
+void __attribute__((interrupt, auto_psv)) _RTCCInterrupt(void) {
+    event_manager(EVENT_PRIORITY_LOW);
+    EVENT_PRIORITY_LOW_FLAG = 0; //interrupt flag reset
+}
+
+void __attribute__((interrupt, auto_psv)) _OC1Interrupt(void) {
+    event_manager(EVENT_PRIORITY_MEDIUM);
+    EVENT_PRIORITY_MEDIUM_FLAG = 0; // interrupt flag reset
+}
+
+void __attribute__((interrupt, auto_psv)) _OC2Interrupt(void) {
+    event_manager(EVENT_PRIORITY_HIGH);
+    EVENT_PRIORITY_HIGH_FLAG = 0; //interrupt flag reset
+}
+
+void __attribute__((interrupt, auto_psv)) _OC3Interrupt(void) {
+    event_manager(EVENT_PRIORITY_VERY_LOW);
+    EVENT_PRIORITY_VERY_LOW_FLAG = 0;
+}
+
+//******** OLD
+
+
+
+
 
 
 void init_process(void) {
@@ -176,23 +261,3 @@ unsigned char update_frequency(void) {
 //    }
 //    return service_send;
 //}
-
-void InitInterrupts(void) {
-    //For ADC sensor
-    SENDER_ENABLE = 0; // Disable Output Compare Channel 1 interrupt
-//    SENDER_PRIORITY = priority.process[PROCESS_SENDER]; // Set Output Compare Channel 1 Priority Level
-    IFS0bits.OC1IF = 0; // Clear Output Compare Channel 1 Interrupt Flag
-    SENDER_ENABLE = 1; // Enable Output Compare Channel 1 interrupt
-
-    //For Parsing UART message
-    RX_PARSER_ENABLE = 0; // Disable Output Compare Channel 2 interrupt
-    RX_PARSER_PRIORITY = RX_PARSER_LEVEL; //priority.parse_packet; // Set Output Compare Channel 2 Priority Level
-    IFS0bits.OC2IF = 0; // Clear Output Compare Channel 2 Interrupt Flag
-    RX_PARSER_ENABLE = 1; // Enable Output Compare Channel 2 interrupt
-
-    //    // For dead reckoning
-    //    DEAD_RECK_ENABLE = 0; // Disable RTC interrupt
-    //    DEAD_RECK_PRIORITY = priority.dead_reckoning; // Set RTC Priority Level
-    //    IFS3bits.RTCIF = 0; // Clear RTC Interrupt Flag
-    //    DEAD_RECK_ENABLE = 1; // Enable RTC interrupt
-}
