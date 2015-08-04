@@ -53,27 +53,33 @@
 /* System Function Prototypes                                                 */
 /******************************************************************************/
 
-    /**
-     * Initialization all system events
-     */
-    void InitEvents(void);
-    /**
-     * Initialization Timer 3
-     * Timer system and ADC timer 
-     */
-    void InitTimer3(void); 
+/**
+ * Handles clock switching/osc initialization
+ */
+void ConfigureOscillator(void); 
+
+
+//    /**
+//     * Initialization all system events
+//     */
+//    void InitEvents(void);
+//    /**
+//     * Initialization Timer 3
+//     * Timer system and ADC timer 
+//     */
+//    void InitTimer3(void); 
 
 /* Custom oscillator configuration funtions, reset source evaluation
 functions, and other non-peripheral microcontroller initialization functions
 go here. */
 
-//void init_process(void);
-//process_buffer_t decodeNameProcess(int number);
-unsigned char update_priority(void);
-unsigned char update_frequency(void);
-//services_t services(services_t service);
-void ConfigureOscillator(void); /* Handles clock switching/osc initialization */
-
-void InitInterrupts(void); /* Initalization others interrupts */
-void InitDMA0(void); /* Initialization DMA0 for ADC current */
-void InitADC(void); /* Initialization ADC for measure sensors*/
+////void init_process(void);
+////process_buffer_t decodeNameProcess(int number);
+//unsigned char update_priority(void);
+//unsigned char update_frequency(void);
+////services_t services(services_t service);
+//
+//
+//void InitInterrupts(void); /* Initalization others interrupts */
+//void InitDMA0(void); /* Initialization DMA0 for ADC current */
+//void InitADC(void); /* Initialization ADC for measure sensors*/

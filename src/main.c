@@ -16,10 +16,10 @@
 #include <stdint.h>        /* Includes uint16_t definition                    */
 #include <stdbool.h>       /* Includes true/false definition                  */
 
+#include "system/system.h"        /* System funct/params, like osc/peripheral config */
+#include "system/peripherals.h"
 #include "communication/serial.h"
 
-#include "system/system.h"        /* System funct/params, like osc/peripheral config */
-#include "system/user.h"          /* User funct/params, such as InitApp              */
 
 /******************************************************************************/
 /* Global Variable Declaration                                                */
@@ -35,18 +35,17 @@
 int16_t main(void) {
     /** INITIALIZATION Operative System **/
     ConfigureOscillator();  ///< Configure the oscillator for the device
-    //Peripherals_Init();     ///< Initialize IO ports and peripherals
-    InitEvents();   ///< Initialize processes controller
-    InitTimer3();   ///< Open Timer1 for clock system
+    Peripherals_Init();     ///< Initialize IO ports and peripherals
+    
+    
+//    InitEvents();   ///< Initialize processes controller
+//    InitTimer3();   ///< Open Timer1 for clock system
 
     /** SERIAL CONFIGURATION **/
     SerialComm_Init();  ///< Open UART1 for serial communication and Open DMA1 for TX UART1
 
-    /* Initialize IO ports and peripherals */
-    InitApp();
-
-    /* Initialize parameter sensor */
-    update_parameter();
+//    /* Initialize parameter sensor */
+//    update_parameter();
 
     while (true) {
         

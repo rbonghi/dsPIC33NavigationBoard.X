@@ -10,6 +10,7 @@
       <logicalFolder name="f2" displayName="system" projectFiles="true">
         <itemPath>includes/system/system.h</itemPath>
         <itemPath>includes/system/user.h</itemPath>
+        <itemPath>includes/system/peripherals.h</itemPath>
       </logicalFolder>
     </logicalFolder>
     <logicalFolder name="LinkerScript"
@@ -33,6 +34,7 @@
         <itemPath>src/system/system.c</itemPath>
         <itemPath>src/system/traps.c</itemPath>
         <itemPath>src/system/user.c</itemPath>
+        <itemPath>src/system/peripherals.c</itemPath>
       </logicalFolder>
       <itemPath>src/main.c</itemPath>
     </logicalFolder>
@@ -55,7 +57,7 @@
         <targetPluginBoard></targetPluginBoard>
         <platformTool>ICD3PlatformTool</platformTool>
         <languageToolchain>XC16</languageToolchain>
-        <languageToolchainVersion></languageToolchainVersion>
+        <languageToolchainVersion>1.24</languageToolchainVersion>
         <platform>4</platform>
       </toolsSet>
       <compileType>

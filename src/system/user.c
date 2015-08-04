@@ -33,47 +33,6 @@ sensor_t sensors;
 /* User Functions                                                             */
 /******************************************************************************/
 
-/* <Initialize variables in user.h and insert code for user algorithms.> */
-
-void InitApp(void) {
-    // Unlock Registers  *****************************************
-    asm volatile ( "mov #OSCCONL, w1 \n"
-                "mov #0x45, w2 \n"
-                "mov #0x57, w3 \n"
-                "mov.b w2, [w1] \n"
-                "mov.b w3, [w1] \n"
-                "bclr OSCCON, #6 ");
-    //**********************************************************//
-    // Configure Input Functions
-    //UART RX
-    RPINR18bits.U1RXR = 25; // Assign U1RX To Pin RP25
-
-    // Configure Output Functions
-    //UART TX
-    RPOR12bits.RP24R = 3; // Assign U1Tx To Pin RP24
-
-    //************************************************************
-    // Lock Registers ********************************************
-    asm volatile ( "mov #OSCCONL, w1 \n"
-                "mov #0x45, w2 \n"
-                "mov #0x57, w3 \n"
-                "mov.b w2, [w1] \n"
-                "mov.b w3, [w1] \n"
-                "bset OSCCON, #6");
-    //**********************************************************//?
-
-    /* Setup analog functionality and port direction */
-    _TRISA9 = 0; //Regulator
-    _TRISA4 = 0; //Led RED
-    _TRISA8 = 0; //Led BLUE
-    _TRISC8 = 0;
-    _TRISC9 = 1;
-    /* Initialize peripherals */
-    LED_RED = 0;
-    LED_BLUE = 0;
-    REGULATOR = 0;
-}
-
 void update_parameter() {
 //    parameter_sensors.exp_sharp = -1.11;
 //    parameter_sensors.gain_current = 1;
@@ -119,7 +78,7 @@ int send_data() {
 
 int ProcessADCSamples(Buffer_t* AdcBuffer) {
     unsigned int t = TMR3; // Timing function
-    int i;
+//    int i;
     //Convert adc value to distance
 //    for (i = 0; i < NUMBER_INFRARED; i++) {
 //        infrared.infrared[i] = parameter_sensors.gain_sharp * powf((3.3 / 1024) * AdcBuffer->infrared[i], parameter_sensors.exp_sharp);
